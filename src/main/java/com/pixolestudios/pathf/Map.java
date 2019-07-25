@@ -19,7 +19,7 @@ public class Map {
                     {" ", "#", "#", " ", " ", " ", "#", " ", "#", "#", " ", " ", " ", "#", " "},// 11
                     {" ", "#", " ", " ", "#", " ", "#", " ", "#", " ", " ", "#", " ", " ", " "},// 12
                     {" ", " ", " ", "#", "#", " ", "#", " ", " ", " ", "#", "#", " ", "#", " "},// 13
-                    {" ", "#", " ", " ", "#", " ", "#", " ", "#", " ", " ", "#", " ", "#", "O"},// 14
+                    {" ", "#", " ", " ", "#", " ", "#", " ", "#", " ", " ", "#", " ", "#", "0"},// 14
                     {" ", "#", "#", " ", " ", " ", "#", " ", "#", "#", " ", " ", " ", "#", " "},// 15
                     {" ", " ", " ", " ", "#", " ", " ", " ", " ", " ", " ", "#", " ", " ", " "} // 16
             };
@@ -38,6 +38,14 @@ public class Map {
         return "#".equals(map[y - 1][x - 1]);
     }
 
+    private boolean cellIsEmpty(int x, int y) {
+        return " ".equals(map[y - 1][x - 1]);
+    }
+
+    private boolean cellIsStart(int x, int y) {
+        return "S".equals(map[y - 1][x - 1]);
+    }
+
     @SuppressWarnings("ProhibitedExceptionCaught")
     private boolean cellInBounds(int y, int x) {
         try {
@@ -48,7 +56,7 @@ public class Map {
         }
     }
 
-    public List<Node> getNeighbours(Node node) {
+    public List<Node> makeNeighbours(Node node) {
         List<Node> toReturn = new ArrayList<>();
 
         toReturn.add(new Node(node.getxCoord() - 1, node.getyCoord(), node.getCounter() + 1));
@@ -73,6 +81,28 @@ public class Map {
             toReturn.append("\n");
         }
         return toReturn.toString();
+    }
+
+    public List<Node> getNeighbours(Node node) {
+        List<Node> toReturn = new ArrayList<>();
+
+        int x = node.getxCoord();
+        int y = node.getyCoord();
+
+        if (!cellIsWall(x - 1, y) && !cellIsEmpty(x - 1, y) && !cellIsStart(x - 1, y)) {
+            toReturn.add(new Node(x - 1, y, Integer.valueOf(map[y - 1][x - 1 - 1])));
+        }
+        if (!cellIsWall(x, y - 1) && !cellIsEmpty(x, y - 1) && !cellIsStart(x, y - 1)) {
+            toReturn.add(new Node(x, y - 1, Integer.valueOf(map[y - 1 - 1][x - 1])));
+        }
+        if (!cellIsWall(x + 1, y) && !cellIsEmpty(x + 1, y) && !cellIsStart(x + 1, y)) {
+            toReturn.add(new Node(x + 1, y, Integer.valueOf(map[y - 1][x])));
+        }
+        if (!cellIsWall(x, y + 1) && !cellIsEmpty(x, y + 1) && !cellIsStart(x, y + 1)) {
+            toReturn.add(new Node(x, y + 1, Integer.valueOf(map[y][x - 1])));
+        }
+
+        return toReturn;
     }
 }
 

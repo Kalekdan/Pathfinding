@@ -14,7 +14,7 @@ public class Pathfinder {
             if (atDestination) {
                 break;
             }
-            List<Node> neighbourArr = maze.getNeighbours(queue.get(i));
+            List<Node> neighbourArr = maze.makeNeighbours(queue.get(i));
             // For each of the neighbours
             Iterator<Node> neighbourItr = neighbourArr.iterator();
             while (neighbourItr.hasNext()) {
@@ -42,12 +42,22 @@ public class Pathfinder {
             }
         }
 
+        // Update map with distances
         for (Node node : queue) {
             if (!node.equalsCoords(destinationNode) && !node.equalsCoords(startNode)) {
                 maze.setCell(node.getxCoord(), node.getyCoord(), String.valueOf(node.getCounter()));
             }
         }
         System.out.println(maze);
+
+        // Trace through distances for shortest path
+        Node stepThroughNode = destinationNode;
+        boolean complete = false;
+        while (!complete) {
+            complete = stepThroughNode.equalsCoords(startNode);
+            System.out.println(stepThroughNode);
+            stepThroughNode = Node.getLowestDistanceNode(maze.getNeighbours(stepThroughNode));
+        }
     }
 }
 
