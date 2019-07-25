@@ -11,10 +11,14 @@ public class Pathfinder {
     private boolean atDestination = false;
 
     public Pathfinder(Map maze, Node startNode, Node destinationNode) {
+        System.out.println(maze);
+
         queue.add(startNode);
 
         for (int i = 0; i < queue.size(); i++) {
-            if (atDestination) break;
+            if (atDestination) {
+                break;
+            }
             neighbourArr = maze.getNeighbours(queue.get(i));
             // For each of the neighbours
             Iterator<Node> neighbourItr = neighbourArr.iterator();
@@ -34,7 +38,7 @@ public class Pathfinder {
                 }
             }
             queue.addAll(neighbourArr);
-            System.out.println("Queue: " + queue);
+            // System.out.println("Queue: " + queue);
             // If last element coords == destination coords, we have reached desitnationo
             for (Node queueNode : queue) {
                 if (queueNode.equalsCoords(destinationNode)) {
@@ -42,6 +46,15 @@ public class Pathfinder {
                 }
             }
         }
+
+
+
+        for (Node node: queue) {
+            if (!node.equalsCoords(destinationNode) && !node.equalsCoords(startNode)){
+                maze.setCell(node.getxCoord(), node.getyCoord(), String.valueOf(node.getCounter()));
+            }
+        }
+        System.out.println(maze);
     }
 }
 
