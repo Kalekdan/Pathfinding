@@ -1,6 +1,7 @@
 package main.java.com.pixolestudios.pathf;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Pathfinder {
     private ArrayList<Node> queue = new ArrayList<>();
@@ -9,30 +10,38 @@ public class Pathfinder {
 
     private boolean atDestination = false;
 
-    public Pathfinder(Map maze, Node startNode, Node destinationNode){
+    public Pathfinder(Map maze, Node startNode, Node destinationNode) {
         queue.add(startNode);
 
-        while (!atDestination){
-            neighbourArr = maze.getNeighbours(startNode);
-            for (int i = 0; i < neighbourArr.size(); i++) {
-                if (maze.cellIsWall(neighbourArr.get(i).getxCoord(), neighbourArr.get(i).getyCoord())){
-                    neighbourArr.remove(i);
-                    continue;
+        for (int i = 0; i < queue.size(); i++) {
+            if (atDestination) break;
+            neighbourArr = maze.getNeighbours(queue.get(i));
+            // For each of the neighbours
+            Iterator<Node> neighbourItr = neighbourArr.iterator();
+            while (neighbourItr.hasNext()) {
+                Node neighbour = neighbourItr.next();
+                // If neightbour is wall remove from list
+                if (maze.cellIsWall(neighbour.getxCoord(), neighbour.getyCoord())) {
+                    neighbourItr.remove();
                 }
+                // If neighbour is already in main queue with lower/equal counter remove it
                 for (Node queueNode : queue) {   // Check if coords are already in main queue
-                    if (queueNode.equalsCoords(neighbourArr.get(i))) {
-                        if (queueNode.getCounter() <= neighbourArr.get(i).getCounter()){
-                            neighbourArr.remove(i);
+                    if (queueNode.equalsCoords(neighbour)) {
+                        if (queueNode.getCounter() <= neighbour.getCounter()) {
+                            neighbourItr.remove();
                         }
                     }
                 }
             }
             queue.addAll(neighbourArr);
+            System.out.println("Queue: " + queue);
             // If last element coords == destination coords, we have reached desitnationo
-            if (queue.get(queue.size() - 1).equalsCoords(destinationNode)){
-                atDestination = true;
+            for (Node queueNode : queue) {
+                if (queueNode.equalsCoords(destinationNode)) {
+                    atDestination = true;
+                }
             }
         }
-        System.out.print(neighbourArr);
     }
 }
+

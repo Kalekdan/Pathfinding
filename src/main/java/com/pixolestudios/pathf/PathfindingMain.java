@@ -7,6 +7,6 @@ public class PathfindingMain {
     public static void main(String[] args) {
         Map maze = new Map();
 
-        Pathfinder pathfinder = new Pathfinder(maze, new Node(3, 2, 0), new Node(5, 3, 1));
+        Pathfinder pathfinder = new Pathfinder(maze, new Node(3, 8, 0), new Node(1, 3, 1));
     }
 }
