@@ -2,24 +2,19 @@ package main.java.com.pixolestudios.pathf;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class Pathfinder {
-    private ArrayList<Node> queue = new ArrayList<>();
-
-    private ArrayList<Node> neighbourArr = new ArrayList<>();
-
-    private boolean atDestination = false;
-
-    public Pathfinder(Map maze, Node startNode, Node destinationNode) {
+    public Pathfinder(Map maze, Node destinationNode, Node startNode) {
         System.out.println(maze);
-
+        ArrayList<Node> queue = new ArrayList<>();
         queue.add(startNode);
-
+        boolean atDestination = false;
         for (int i = 0; i < queue.size(); i++) {
             if (atDestination) {
                 break;
             }
-            neighbourArr = maze.getNeighbours(queue.get(i));
+            List<Node> neighbourArr = maze.getNeighbours(queue.get(i));
             // For each of the neighbours
             Iterator<Node> neighbourItr = neighbourArr.iterator();
             while (neighbourItr.hasNext()) {
@@ -47,10 +42,8 @@ public class Pathfinder {
             }
         }
 
-
-
-        for (Node node: queue) {
-            if (!node.equalsCoords(destinationNode) && !node.equalsCoords(startNode)){
+        for (Node node : queue) {
+            if (!node.equalsCoords(destinationNode) && !node.equalsCoords(startNode)) {
                 maze.setCell(node.getxCoord(), node.getyCoord(), String.valueOf(node.getCounter()));
             }
         }
